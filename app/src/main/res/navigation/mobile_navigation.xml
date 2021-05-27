@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_note_list">
+
+    <fragment
+        android:id="@+id/nav_note_list"
+        android:name="com.jeffreyorazulike.noteskeeper.ui.notelist.NoteListFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_note_list" >
+        <action
+            android:id="@+id/action_nav_note_list"
+            app:destination="@id/nav_note_list" />
+        <argument
+            android:name="SHOW"
+            app:argType="com.jeffreyorazulike.noteskeeper.ui.notelist.NoteListFragment$ARGUMENTS$SHOW_VALUES"
+            android:defaultValue="NOTES" />
+        <action
+            android:id="@+id/action_nav_note_list_to_nav_note"
+            app:destination="@id/nav_note" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_note"
+        android:name="com.jeffreyorazulike.noteskeeper.ui.note.NoteFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_note">
+        <argument
+            android:name="NOTE_POSITION"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>
