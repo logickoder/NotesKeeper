@@ -2,7 +2,6 @@ package com.jeffreyorazulike.noteskeeper.ui.note;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,8 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,12 +22,11 @@ import com.jeffreyorazulike.noteskeeper.dao.DataManager;
 import com.jeffreyorazulike.noteskeeper.dao.NoteInfo;
 import com.jeffreyorazulike.noteskeeper.databinding.ContentNoteBinding;
 import com.jeffreyorazulike.noteskeeper.databinding.FragmentNoteBinding;
-import com.jeffreyorazulike.noteskeeper.ui.notelist.NoteListFragment;
+import com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 
 public class NoteFragment extends Fragment {
     public static final int POSITION_NOT_SET = -1;
@@ -120,7 +116,7 @@ public class NoteFragment extends Fragment {
         mBinding.spinnerCourses.setAdapter(listAdapter);
 
         if(getArguments() != null){
-            mNotePosition = getArguments().getInt(NoteListFragment.ARGUMENTS.NOTE_POSITION.name(), POSITION_NOT_SET);
+            mNotePosition = getArguments().getInt(HomeFragment.ARGUMENTS.NOTE_POSITION.name(), POSITION_NOT_SET);
         }
         mIsNewNote = mNotePosition == POSITION_NOT_SET;
 

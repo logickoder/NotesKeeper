@@ -1,4 +1,4 @@
-package com.jeffreyorazulike.noteskeeper.ui.notelist;
+package com.jeffreyorazulike.noteskeeper.ui.home;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,9 +15,8 @@ import com.jeffreyorazulike.noteskeeper.dao.DataManager;
 import com.jeffreyorazulike.noteskeeper.dao.NoteInfo;
 import com.jeffreyorazulike.noteskeeper.databinding.ItemCourseListBinding;
 import com.jeffreyorazulike.noteskeeper.databinding.ItemNoteListBinding;
-import com.jeffreyorazulike.noteskeeper.ui.note.NoteFragment;
 
-public class NoteListViewModel extends ViewModel {
+public class HomeViewModel extends ViewModel {
 
     private NotesKeeperAdapter mNotesKeeperAdapter;
 
@@ -31,7 +30,7 @@ public class NoteListViewModel extends ViewModel {
             },
             position -> view -> {
                 Bundle bundle = new Bundle(1);
-                bundle.putInt(NoteListFragment.ARGUMENTS.NOTE_POSITION.name(), position);
+                bundle.putInt(HomeFragment.ARGUMENTS.NOTE_POSITION.name(), position);
                 Navigation.findNavController(activity, R.id.nav_host_fragment).navigate(R.id.action_nav_note_list_to_nav_note, bundle);
         });
     }

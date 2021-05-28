@@ -7,8 +7,7 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.jeffreyorazulike.noteskeeper.databinding.ActivityMainBinding;
-import com.jeffreyorazulike.noteskeeper.ui.note.NoteFragment;
-import com.jeffreyorazulike.noteskeeper.ui.notelist.NoteListFragment;
+import com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -18,11 +17,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NotesKeeperInterfaces.Observer<HomeFragment.ARGUMENTS.SHOW_VALUES> {
 
     private AppBarConfiguration mAppBarConfiguration;
     private NavController mNavController;
     private ActivityMainBinding mBinding;
+    private NotesKeeperInterfaces.Observable<HomeFragment.ARGUMENTS.SHOW_VALUES> mObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(mBinding.navView, mNavController);
         mBinding.navView.setNavigationItemSelectedListener(this);
+        selectMenu(R.id.nav_notes);
     }
 
     @Override
@@ -59,19 +60,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         final int id = item.getItemId();
-        final NotesKeeperInterfaces.Function<NoteListFragment.ARGUMENTS.SHOW_VALUES, Void> show = value -> {
-            Bundle bundle = new Bundle(1);
-            bundle.putSerializable(NoteListFragment.ARGUMENTS.SHOW.name(), value);
-            Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.action_nav_note_list, bundle);
-            return null;
-        };
-        if(id == R.id.nav_notes) show.fun(NoteListFragment.ARGUMENTS.SHOW_VALUES.NOTES);
-        else if(id == R.id.nav_courses) show.fun(NoteListFragment.ARGUMENTS.SHOW_VALUES.COURSES);
+
+        if(id == R.id.nav_notes) mObservable.work(HomeFragment.ARGUMENTS.SHOW_VALUES.NOTES);
+        else if(id == R.id.nav_courses) mObservable.work(HomeFragment.ARGUMENTS.SHOW_VALUES.COURSES);
         else{
             Snackbar.make(mBinding.getRoot(), item.getTitle(), Snackbar.LENGTH_SHORT).show();
         }
 
         mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void selectMenu(final int id){
+        mBinding.navView.getMenu().findItem(id).setChecked(true);
+    }
+
+    @Override
+    public void bind(final NotesKeeperInterfaces.Observable<HomeFragment.ARGUMENTS.SHOW_VALUES> observable) {
+        mObservable = observable;
     }
 }

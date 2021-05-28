@@ -7,15 +7,12 @@
 
     <fragment
         android:id="@+id/nav_note_list"
-        android:name="com.jeffreyorazulike.noteskeeper.ui.notelist.NoteListFragment"
+        android:name="com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_note_list" >
-        <action
-            android:id="@+id/action_nav_note_list"
-            app:destination="@id/nav_note_list" />
+        tools:layout="@layout/fragment_home" >
         <argument
             android:name="SHOW"
-            app:argType="com.jeffreyorazulike.noteskeeper.ui.notelist.NoteListFragment$ARGUMENTS$SHOW_VALUES"
+            app:argType="com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment$ARGUMENTS$SHOW_VALUES"
             android:defaultValue="NOTES" />
         <action
             android:id="@+id/action_nav_note_list_to_nav_note"

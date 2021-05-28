@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.NotesKeeper" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/orange_500</item>
+        <item name="colorPrimaryVariant">@color/orange_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -22,4 +22,14 @@
     <style name="Theme.NotesKeeper.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.NotesKeeper.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CourseTitle" parent="@style/TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/orange_500</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AddFab" parent="@style/Widget.MaterialComponents.FloatingActionButton">
+        <item name="srcCompat">@drawable/ic_baseline_add_24</item>
+        <item name="android:tint">@android:color/white</item>
+    </style>
 </resources>
