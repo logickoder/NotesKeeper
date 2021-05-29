@@ -36,7 +36,7 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_course"
                 app:layout_constraintTop_toBottomOf="@+id/tv_course"
                 app:srcCompat="@drawable/ic_menu_slideshow"
-                app:tint="@color/orange_500" />
+                app:tint="@color/plurasight_orange" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

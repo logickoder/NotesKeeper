@@ -11,18 +11,21 @@ import com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NotesKeeperInterfaces.Observer<HomeFragment.ARGUMENTS.SHOW_VALUES> {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private NavController mNavController;
     private ActivityMainBinding mBinding;
-    private NotesKeeperInterfaces.Observable<HomeFragment.ARGUMENTS.SHOW_VALUES> mObservable;
+    private final MutableLiveData<HomeFragment.ARGUMENTS.SHOW_VALUES> mHomeFragmentCommunication = new MutableLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         final int id = item.getItemId();
 
-        if(id == R.id.nav_notes) mObservable.work(HomeFragment.ARGUMENTS.SHOW_VALUES.NOTES);
-        else if(id == R.id.nav_courses) mObservable.work(HomeFragment.ARGUMENTS.SHOW_VALUES.COURSES);
+        if(id == R.id.nav_notes) mHomeFragmentCommunication.setValue(HomeFragment.ARGUMENTS.SHOW_VALUES.NOTES);
+        else if(id == R.id.nav_courses) mHomeFragmentCommunication.setValue(HomeFragment.ARGUMENTS.SHOW_VALUES.COURSES);
         else{
             Snackbar.make(mBinding.getRoot(), item.getTitle(), Snackbar.LENGTH_SHORT).show();
         }
@@ -71,12 +74,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void selectMenu(final int id){
-        mBinding.navView.getMenu().findItem(id).setChecked(true);
+    public LiveData<HomeFragment.ARGUMENTS.SHOW_VALUES> getHomeFragmentLiveData() {
+        return mHomeFragmentCommunication;
     }
 
-    @Override
-    public void bind(final NotesKeeperInterfaces.Observable<HomeFragment.ARGUMENTS.SHOW_VALUES> observable) {
-        mObservable = observable;
+    private void selectMenu(final int id){
+        mBinding.navView.getMenu().findItem(id).setChecked(true);
     }
 }

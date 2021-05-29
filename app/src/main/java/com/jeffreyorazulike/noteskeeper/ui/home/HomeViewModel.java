@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +20,7 @@ import com.jeffreyorazulike.noteskeeper.databinding.ItemNoteListBinding;
 public class HomeViewModel extends ViewModel {
 
     private NotesKeeperAdapter mNotesKeeperAdapter;
+    HomeFragment.ARGUMENTS.SHOW_VALUES currentScreen = HomeFragment.ARGUMENTS.SHOW_VALUES.NOTES;
 
     void initNotes(final Activity activity){
         mNotesKeeperAdapter = new NotesKeeperAdapter<NoteInfo, ItemNoteListBinding>(
@@ -31,7 +33,8 @@ public class HomeViewModel extends ViewModel {
             position -> view -> {
                 Bundle bundle = new Bundle(1);
                 bundle.putInt(HomeFragment.ARGUMENTS.NOTE_POSITION.name(), position);
-                Navigation.findNavController(activity, R.id.nav_host_fragment).navigate(R.id.action_nav_note_list_to_nav_note, bundle);
+                final NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
+                navController.navigate(R.id.action_nav_note_list_to_nav_note, bundle);
         });
     }
 

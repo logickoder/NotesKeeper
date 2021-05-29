@@ -1,6 +1,7 @@
 package com.jeffreyorazulike.noteskeeper.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.jeffreyorazulike.noteskeeper.MainActivity;
 import com.jeffreyorazulike.noteskeeper.NotesKeeperInterfaces;
 import com.jeffreyorazulike.noteskeeper.R;
 import com.jeffreyorazulike.noteskeeper.databinding.ContentNoteListBinding;
 import com.jeffreyorazulike.noteskeeper.databinding.FragmentHomeBinding;
 
+import static android.content.ContentValues.TAG;
 import static com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment.ARGUMENTS.SHOW_VALUES.NOTES;
 
-public class HomeFragment extends Fragment implements NotesKeeperInterfaces.Observable<HomeFragment.ARGUMENTS.SHOW_VALUES> {
+public class HomeFragment extends Fragment {
     public enum ARGUMENTS{
         NOTE_POSITION;
 
@@ -43,12 +47,11 @@ public class HomeFragment extends Fragment implements NotesKeeperInterfaces.Obse
         mLinearLayoutManager = new LinearLayoutManager(inflater.getContext());
         mGridLayoutManager = new GridLayoutManager(inflater.getContext(), requireActivity().getResources().getInteger(R.integer.course_grid_span));
 
-        mBinding.fabAddNote.setOnClickListener(view -> {
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_nav_note_list_to_nav_note);
-        });
+        mBinding.fabAddNote.setOnClickListener(view -> Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_nav_note_list_to_nav_note));
 
-        ((NotesKeeperInterfaces.Observer<ARGUMENTS.SHOW_VALUES>) requireActivity()).bind(this);
-        work(NOTES);
+        ((MainActivity) requireActivity()).getHomeFragmentLiveData()
+                .observeForever(this::changeDisplay);
+        changeDisplay(mHomeViewModel.currentScreen);
 
         return mBinding.getRoot();
     }
@@ -78,8 +81,12 @@ public class HomeFragment extends Fragment implements NotesKeeperInterfaces.Obse
         mHomeViewModel.getAdapter().notifyDataSetChanged();
     }
 
-    @Override
-    public void work(final ARGUMENTS.SHOW_VALUES show_values) {
+    private void changeDisplay(final ARGUMENTS.SHOW_VALUES show_values) {
+        mHomeViewModel.currentScreen = show_values;
+        if(!isAdded())
+            Navigation.findNavController(
+                    requireActivity(), R.id.nav_host_fragment).navigateUp();
+
         switch (show_values){
             case COURSES:
                 displayCourses();

@@ -2,9 +2,10 @@
     <!-- Base application theme. -->
     <style name="Theme.NotesKeeper" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/orange_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimaryVariant">@color/dark_gray</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorAccent">@color/plurasight_orange</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
