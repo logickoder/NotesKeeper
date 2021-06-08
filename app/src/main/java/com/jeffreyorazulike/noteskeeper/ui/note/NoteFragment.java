@@ -17,20 +17,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.jeffreyorazulike.noteskeeper.R;
-import com.jeffreyorazulike.noteskeeper.dao.CourseInfo;
-import com.jeffreyorazulike.noteskeeper.dao.DataManager;
-import com.jeffreyorazulike.noteskeeper.dao.NoteInfo;
+import com.jeffreyorazulike.noteskeeper.db.dao.CourseInfo;
+import com.jeffreyorazulike.noteskeeper.db.dao.DataManager;
+import com.jeffreyorazulike.noteskeeper.db.dao.NoteInfo;
 import com.jeffreyorazulike.noteskeeper.databinding.ContentNoteBinding;
 import com.jeffreyorazulike.noteskeeper.databinding.FragmentNoteBinding;
-import com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class NoteFragment extends Fragment {
-    public static final int POSITION_NOT_SET = -1;
-
     private NoteInfo mNote;
     private boolean mIsNewNote;
     private boolean mIsCancelling;
@@ -41,12 +39,13 @@ public class NoteFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
+        mViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mViewModel.restoreState(savedInstanceState);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         final FragmentNoteBinding binding = FragmentNoteBinding.inflate(inflater, container, false);
         mBinding = binding.iNote;
         return binding.getRoot();
@@ -69,7 +68,7 @@ public class NoteFragment extends Fragment {
         super.onPause();
         if(mIsCancelling)
             if(mIsNewNote)
-                DataManager.getInstance().removeNote(mNotePosition);
+                DataManager.getInstance().removeNoteAt(mNotePosition);
             else restoreOriginalNoteValues();
         else saveNote();
     }
@@ -78,6 +77,7 @@ public class NoteFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull final MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_main, menu);
+//        menu.getItem(R.id.action_settings).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -94,7 +94,9 @@ public class NoteFragment extends Fragment {
         else if(id == R.id.action_cancel) {
             mIsCancelling = true;
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).popBackStack();
-        }else if(id == R.id.action_next)
+        } else if (id == R.id.action_delete)
+            deleteNote();
+        else if(id == R.id.action_next)
             nextNote();
 
         return super.onOptionsItemSelected(item);
@@ -102,6 +104,7 @@ public class NoteFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NotNull final Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
         final MenuItem next = menu.findItem(R.id.action_next);
         final int lastIndex = DataManager.getInstance().getNotes().size() - 1;
         next.setEnabled(mNotePosition < lastIndex);
@@ -115,8 +118,9 @@ public class NoteFragment extends Fragment {
         listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mBinding.spinnerCourses.setAdapter(listAdapter);
 
+        final int POSITION_NOT_SET = requireContext().getResources().getInteger(R.integer.position_not_set);
         if(getArguments() != null){
-            mNotePosition = getArguments().getInt(HomeFragment.ARGUMENTS.NOTE_POSITION.name(), POSITION_NOT_SET);
+            mNotePosition = getArguments().getInt(requireContext().getString(R.string.position), POSITION_NOT_SET);
         }
         mIsNewNote = mNotePosition == POSITION_NOT_SET;
 
@@ -138,8 +142,10 @@ public class NoteFragment extends Fragment {
     private void displayNote() {
         mBinding.spinnerCourses.setSelection(
                 DataManager.getInstance().getCourses().indexOf(mNote.getCourse()));
-        mBinding.editTextTitle.setText(mNote.getTitle());
-        mBinding.editTextNote.setText(mNote.getText());
+        Objects.requireNonNull(
+                mBinding.tilTitle.getEditText()).setText(mNote.getTitle());
+        Objects.requireNonNull(
+                mBinding.tilNote.getEditText()).setText(mNote.getText());
     }
 
     private void nextNote() {
@@ -160,7 +166,8 @@ public class NoteFragment extends Fragment {
     }
 
     private void restoreOriginalNoteValues() {
-        mNote.setCourse(DataManager.getInstance().getCourse(mViewModel.mOriginalCourseId));
+        mNote.setCourse(DataManager.getInstance().getCourse(
+                        mViewModel.mOriginalCourseId));
         mNote.setTitle(mViewModel.mOriginalNoteTitle);
         mNote.setText(mViewModel.mOriginalNoteText);
     }
@@ -169,18 +176,28 @@ public class NoteFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc2822");
 
-        intent.putExtra(Intent.EXTRA_SUBJECT, mBinding.editTextTitle.getText().toString());
+        intent.putExtra(Intent.EXTRA_SUBJECT, Objects.requireNonNull(
+                mBinding.tilTitle.getEditText()).getText().toString());
         intent.putExtra(Intent.EXTRA_TEXT,
                 "Checkout what I learnt in the Plurasight course \""
                         + ((CourseInfo) mBinding.spinnerCourses.getSelectedItem()).getTitle() + "\"\n"
-                        + mBinding.editTextNote.getText().toString());
+                        + Objects.requireNonNull(mBinding.tilNote.getEditText()).getText().toString());
 
         startActivity(intent);
     }
 
+    /**Saves the current note to the data manager*/
     private void saveNote() {
         mNote.setCourse((CourseInfo) mBinding.spinnerCourses.getSelectedItem());
-        mNote.setTitle(mBinding.editTextTitle.getText().toString());
-        mNote.setText(mBinding.editTextNote.getText().toString());
+        mNote.setTitle(Objects.requireNonNull(
+                mBinding.tilTitle.getEditText()).getText().toString());
+        mNote.setText(Objects.requireNonNull(
+                mBinding.tilNote.getEditText()).getText().toString());
+    }
+
+    /**Deletes a the current note*/
+    private void deleteNote() {
+        DataManager.getInstance().removeNoteAt(mNotePosition);
+        Navigation.findNavController(mBinding.getRoot()).popBackStack();
     }
 }

@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:fragment="com.jeffreyorazulike.noteskeeper.SettingsActivity$GeneralFragment"
+        app:icon="@drawable/ic_baseline_info_24"
+        app:key="general_header"
+        app:title="@string/header_general" />
+
+    <Preference
+        app:fragment="com.jeffreyorazulike.noteskeeper.SettingsActivity$MessagesFragment"
+        app:icon="@drawable/messages"
+        app:key="messages_header"
+        app:title="@string/header_messages" />
+
+    <Preference
+        app:fragment="com.jeffreyorazulike.noteskeeper.SettingsActivity$SyncFragment"
+        app:icon="@drawable/sync"
+        app:key="sync_header"
+        app:title="@string/header_sync" />
+
+</PreferenceScreen>

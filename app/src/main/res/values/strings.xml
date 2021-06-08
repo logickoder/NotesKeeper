@@ -20,4 +20,46 @@
     <string name="communicate">Communicate</string>
     <string name="send">Send</string>
     <string name="share">Share</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="header_general">General</string>
+    <string name="header_messages">Messages</string>
+    <string name="header_sync">Sync</string>
+
+    <!-- General Preferences -->
+    <string name="pref_key_display_name">user_display_name</string>
+    <string name="pref_title_display_name">Display Name</string>
+    <string name="pref_default_display_name">Your Name</string>
+    <string name="pref_key_email_address">user_email_address</string>
+    <string name="pref_title_email_address">Email Address</string>
+    <string name="pref_default_email_address">yourname@yourhost.extension</string>
+    <string name="pref_key_favourite_social">user_favourite_social</string>
+    <string name="pref_title_favourite_social">Favourite Social Network</string>
+    <string name="pref_default_favourite_social">https://www.slack.com</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="course_editor">Course Editor</string>
+    <string name="create">Create</string>
+    <string name="update">Update</string>
+    <string name="modules">Modules</string>
+    <string name="module_id">Module Id</string>
+    <string name="module_title">Module Title</string>
+    <string name="is_module_complete">Completed?</string>
+    <string name="course_id">Course ID</string>
+    <string name="course_name">Course Name</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="position">POSITION</string>
+    <string name="new_">New</string>
+    <string name="edit_module">Edit Module</string>
 </resources>

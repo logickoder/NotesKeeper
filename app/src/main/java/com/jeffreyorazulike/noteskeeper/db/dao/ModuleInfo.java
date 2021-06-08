@@ -1,11 +1,11 @@
-package com.jeffreyorazulike.noteskeeper.dao;
+package com.jeffreyorazulike.noteskeeper.db.dao;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public final class ModuleInfo implements Parcelable {
-    private final String mModuleId;
-    private final String mTitle;
+public final class ModuleInfo {
+    private String mModuleId;
+    private String mTitle;
     private boolean mIsComplete = false;
 
     public ModuleInfo(String moduleId, String title) {
@@ -18,14 +18,16 @@ public final class ModuleInfo implements Parcelable {
         mIsComplete = isComplete;
     }
 
-    private ModuleInfo(Parcel source) {
-        mModuleId = source.readString();
-        mTitle = source.readString();
-        mIsComplete = source.readByte() == 1;
+    public void setModuleId(String moduleId){
+        mModuleId = moduleId;
     }
 
     public String getModuleId() {
         return mModuleId;
+    }
+
+    public void setTitle(String title){
+        mTitle = title;
     }
 
     public String getTitle() {
@@ -59,31 +61,4 @@ public final class ModuleInfo implements Parcelable {
     public int hashCode() {
         return mModuleId.hashCode();
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mModuleId);
-        dest.writeString(mTitle);
-        dest.writeByte((byte)(mIsComplete ? 1 : 0));
-    }
-
-    public static final Creator<ModuleInfo> CREATOR =
-            new Creator<ModuleInfo>() {
-
-                @Override
-                public ModuleInfo createFromParcel(Parcel source) {
-                    return new ModuleInfo(source);
-                }
-
-                @Override
-                public ModuleInfo[] newArray(int size) {
-                    return new ModuleInfo[size];
-                }
-            };
-
 }

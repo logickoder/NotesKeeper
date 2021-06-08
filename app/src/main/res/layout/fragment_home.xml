@@ -14,7 +14,7 @@
         android:layout_gravity="center" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_note"
+        android:id="@+id/fab_add"
         style="@style/AddFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,16 +1,25 @@
-package com.jeffreyorazulike.noteskeeper.dao;
+package com.jeffreyorazulike.noteskeeper.db.dao;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class CourseInfo implements Parcelable {
-    private final String mCourseId;
-    private final String mTitle;
+@Entity(tableName = "courses")
+public final class CourseInfo {
+    @Ignore()
+    private String mCourseId;
+    @ColumnInfo(name = "title")
+    private String mTitle;
+    @ColumnInfo(name = "modules")
     private final List<ModuleInfo> mModules;
 
     public CourseInfo(String courseId, String title, List<ModuleInfo> modules) {
@@ -19,15 +28,16 @@ public final class CourseInfo implements Parcelable {
         mModules = modules;
     }
 
-    private CourseInfo(Parcel source) {
-        mCourseId = source.readString();
-        mTitle = source.readString();
-        mModules = new ArrayList<>();
-        source.readTypedList(mModules, ModuleInfo.CREATOR);
+    public void setCourseId(String courseId){
+        mCourseId = courseId;
     }
 
     public String getCourseId() {
         return mCourseId;
+    }
+
+    public void setTitle(String title){
+        mTitle = title;
     }
 
     public String getTitle() {
@@ -60,12 +70,6 @@ public final class CourseInfo implements Parcelable {
         return null;
     }
 
-    @NotNull
-    @Override
-    public String toString() {
-        return mTitle;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,30 +85,10 @@ public final class CourseInfo implements Parcelable {
     public int hashCode() {
         return mCourseId.hashCode();
     }
+
+    @NotNull
     @Override
-    public int describeContents() {
-        return 0;
+    public String toString() {
+        return mTitle;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mCourseId);
-        dest.writeString(mTitle);
-        dest.writeTypedList(mModules);
-    }
-
-    public static final Creator<CourseInfo> CREATOR =
-            new Creator<CourseInfo>() {
-
-                @Override
-                public CourseInfo createFromParcel(Parcel source) {
-                    return new CourseInfo(source);
-                }
-
-                @Override
-                public CourseInfo[] newArray(int size) {
-                    return new CourseInfo[size];
-                }
-            };
-
 }

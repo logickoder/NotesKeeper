@@ -24,7 +24,7 @@
 
     <style name="Theme.NotesKeeper.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="CourseTitle" parent="@style/TextAppearance.AppCompat.Medium">
+    <style name="Title" parent="@style/TextAppearance.AppCompat.Medium">
         <item name="android:textColor">@color/plurasight_orange</item>
         <item name="android:textStyle">bold</item>
     </style>

@@ -24,7 +24,7 @@ public class NoteViewModel extends ViewModel {
         outState.putString(ORIGINAL_NOTE_TEXT, mOriginalNoteText);
     }
 
-    public void restoreState(final Bundle  inState){
+    public void restoreState(final Bundle inState){
         mOriginalCourseId = (String) inState.get(ORIGINAL_COURSE_ID);
         mOriginalNoteTitle = (String) inState.get(ORIGINAL_NOTE_TITLE);
         mOriginalNoteText = (String) inState.get(ORIGINAL_NOTE_TEXT);

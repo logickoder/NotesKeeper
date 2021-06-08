@@ -1,0 +1,33 @@
+<resources>
+    <!-- True or False -->
+    <string-array name="true_false">
+        <item>true</item>
+        <item>false</item>
+    </string-array>
+
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+
+    <!-- Favourite Social Network Preference -->
+    <string-array name="pref_favourite_social_entries">
+        <item>Slack</item>
+        <item>Facebook</item>
+        <item>Twitter</item>
+        <item>LinkedIn</item>
+    </string-array>
+
+    <string-array name="pref_favourite_social_values">
+        <item>https://www.slack.com</item>
+        <item>https://www.facebook.com</item>
+        <item>https://www.twitter.com</item>
+        <item>https://www.linkedin.com</item>
+    </string-array>
+</resources>

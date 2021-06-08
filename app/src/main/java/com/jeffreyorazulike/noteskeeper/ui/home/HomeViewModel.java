@@ -1,54 +1,49 @@
 package com.jeffreyorazulike.noteskeeper.ui.home;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-
 import androidx.lifecycle.ViewModel;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.jeffreyorazulike.noteskeeper.NotesKeeperAdapter;
-import com.jeffreyorazulike.noteskeeper.R;
-import com.jeffreyorazulike.noteskeeper.dao.CourseInfo;
-import com.jeffreyorazulike.noteskeeper.dao.DataManager;
-import com.jeffreyorazulike.noteskeeper.dao.NoteInfo;
-import com.jeffreyorazulike.noteskeeper.databinding.ItemCourseListBinding;
-import com.jeffreyorazulike.noteskeeper.databinding.ItemNoteListBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jeffreyorazulike.noteskeeper.adapters.CoursesAdapter;
+import com.jeffreyorazulike.noteskeeper.adapters.NotesAdapter;
+import com.jeffreyorazulike.noteskeeper.adapters.NotesKeeperAdapter;
+import com.jeffreyorazulike.noteskeeper.db.dao.DataManager;
 
 public class HomeViewModel extends ViewModel {
 
     private NotesKeeperAdapter mNotesKeeperAdapter;
-    HomeFragment.ARGUMENTS.SHOW_VALUES currentScreen = HomeFragment.ARGUMENTS.SHOW_VALUES.NOTES;
+    private NotesAdapter mNotesAdapter;
+    private CoursesAdapter mCoursesAdapter;
 
-    void initNotes(final Activity activity){
-        mNotesKeeperAdapter = new NotesKeeperAdapter<NoteInfo, ItemNoteListBinding>(
-            DataManager.getInstance().getNotes(),
-            parent -> ItemNoteListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false),
-            (note, binding) -> {
-                binding.tvTitle.setText(note.getTitle());
-                binding.tvCourse.setText(note.getCourse().toString());
-            },
-            position -> view -> {
-                Bundle bundle = new Bundle(1);
-                bundle.putInt(HomeFragment.ARGUMENTS.NOTE_POSITION.name(), position);
-                final NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
-                navController.navigate(R.id.action_nav_note_list_to_nav_note, bundle);
-        });
+    private HomeFragment.SHOW_VALUES currentScreen = HomeFragment.SHOW_VALUES.NOTES;
+
+    void init(FloatingActionButton floatingActionButton){
+        switch (currentScreen){
+            case NOTES:
+                if(mNotesAdapter == null)
+                    mNotesAdapter = new NotesAdapter(
+                            DataManager.getInstance().getNotes(), floatingActionButton.getContext());
+                floatingActionButton.setOnClickListener(mNotesAdapter);
+                mNotesKeeperAdapter = mNotesAdapter;
+                break;
+            case COURSES:
+                if(mCoursesAdapter == null)
+                    mCoursesAdapter = new CoursesAdapter(
+                            DataManager.getInstance().getCourses(), floatingActionButton.getContext());
+                floatingActionButton.setOnClickListener(mCoursesAdapter);
+                mNotesKeeperAdapter = mCoursesAdapter;
+                break;
+        }
     }
 
-    void initCourses(){
-        mNotesKeeperAdapter = new NotesKeeperAdapter<CourseInfo, ItemCourseListBinding>(
-            DataManager.getInstance().getCourses(),
-            parent -> ItemCourseListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false),
-            (course, binding) -> binding.tvCourse.setText(course.toString()),
-            position -> view -> {
-                Snackbar.make(view,DataManager.getInstance().getCourses().get(position).toString(),Snackbar.LENGTH_LONG);
-        });
-    }
-
-    public NotesKeeperAdapter getAdapter(){
+    NotesKeeperAdapter getAdapter(){
         return mNotesKeeperAdapter;
+    }
+
+    void setCurrentScreen(HomeFragment.SHOW_VALUES currentScreen) {
+        this.currentScreen = currentScreen;
+    }
+
+    HomeFragment.SHOW_VALUES getCurrentScreen() {
+        return currentScreen;
     }
 }

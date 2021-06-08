@@ -10,14 +10,12 @@
         android:name="com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_home" >
-        <argument
-            android:name="SHOW"
-            app:argType="com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment$ARGUMENTS$SHOW_VALUES"
-            android:defaultValue="NOTES" />
         <action
             android:id="@+id/action_nav_note_list_to_nav_note"
             app:destination="@id/nav_note" />
-
+        <action
+            android:id="@+id/action_nav_note_list_to_nav_course"
+            app:destination="@id/nav_course" />
     </fragment>
 
     <fragment
@@ -26,7 +24,18 @@
         android:label="@string/app_name"
         tools:layout="@layout/fragment_note">
         <argument
-            android:name="NOTE_POSITION"
+            android:name="@string/position"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_course"
+        android:name="com.jeffreyorazulike.noteskeeper.ui.course.CourseFragment"
+        android:label="@string/course_editor"
+        tools:layout="@layout/fragment_course">
+        <argument
+            android:name="@string/position"
             android:defaultValue="-1"
             app:argType="integer" />
     </fragment>

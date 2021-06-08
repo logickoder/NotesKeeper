@@ -1,4 +1,4 @@
-package com.jeffreyorazulike.noteskeeper.dao;
+package com.jeffreyorazulike.noteskeeper.db.dao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,11 @@ public class DataManager {
     }
 
     public String getCurrentUserName() {
-        return "Jim Wilson";
+        return "Jeffrey Orazulike";
     }
 
     public String getCurrentUserEmail() {
-        return "jimw@jwhh.com";
+        return "chukwudumebiorazulike@gmail.com";
     }
 
     public List<NoteInfo> getNotes() {
@@ -36,6 +36,28 @@ public class DataManager {
         return mNotes.size() - 1;
     }
 
+    public boolean removeNoteAt(int position) {
+        if(position >= mNotes.size() || position < 0)
+            return false;
+
+        mNotes.remove(position);
+        return true;
+    }
+
+    public int createNewCourse() {
+        CourseInfo course = new CourseInfo("", "", new ArrayList<ModuleInfo>());
+        mCourses.add(course);
+        return mCourses.size() - 1;
+    }
+
+    public boolean removeCourseAt(int position) {
+        if(position >= mCourses.size() || position < 0)
+            return false;
+
+        mCourses.remove(position);
+        return true;
+    }
+
     public int findNote(NoteInfo note) {
         for(int index = 0; index < mNotes.size(); index++) {
             if(note.equals(mNotes.get(index)))
@@ -43,10 +65,6 @@ public class DataManager {
         }
 
         return -1;
-    }
-
-    public void removeNote(int index) {
-        mNotes.remove(index);
     }
 
     public List<CourseInfo> getCourses() {
