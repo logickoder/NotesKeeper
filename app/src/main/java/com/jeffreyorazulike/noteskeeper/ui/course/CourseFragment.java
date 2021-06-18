@@ -18,11 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jeffreyorazulike.noteskeeper.R;
 import com.jeffreyorazulike.noteskeeper.adapters.CourseAdapter;
+import com.jeffreyorazulike.noteskeeper.databinding.DialogModuleBinding;
+import com.jeffreyorazulike.noteskeeper.databinding.FragmentCourseBinding;
 import com.jeffreyorazulike.noteskeeper.db.dao.CourseInfo;
 import com.jeffreyorazulike.noteskeeper.db.dao.DataManager;
 import com.jeffreyorazulike.noteskeeper.db.dao.ModuleInfo;
-import com.jeffreyorazulike.noteskeeper.databinding.DialogModuleBinding;
-import com.jeffreyorazulike.noteskeeper.databinding.FragmentCourseBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +44,8 @@ public class CourseFragment extends Fragment{
     private CourseAdapter mCourseAdapter;
     private AlertDialog mDialog;
     private boolean mIsCancelling;
+
+    private final DataManager dm = DataManager.INSTANCE.get();
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class CourseFragment extends Fragment{
         if(mIsCancelling)
             if(mIsNewCourse)
                 deleteCourse();
-            else DataManager.getInstance().getCourses().set(mCoursePosition, mViewModel.getCourse());
+            else dm.getCourses().set(mCoursePosition, mViewModel.getCourse());
         // saves the course but deletes the course if all fields are empty
         else if(!saveCourse()) deleteCourse();
     }
@@ -117,7 +119,7 @@ public class CourseFragment extends Fragment{
 
         if(mIsNewCourse)createNewCourse();
         else{
-            mCourse = DataManager.getInstance().getCourses().get(mCoursePosition);
+            mCourse = dm.getCourses().get(mCoursePosition);
         }
 
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -132,8 +134,8 @@ public class CourseFragment extends Fragment{
             mDialog.dismiss();
         });
         //update the module ids whenever the course id is changed
-        Objects.requireNonNull(mBinding.tilCourseId.getEditText())
-                .setOnFocusChangeListener((view, focus) -> {
+        Objects.requireNonNull(mBinding.tilCourseId.getEditText()).
+                setOnFocusChangeListener((view, focus) -> {
             if(!focus) updateModulesId();
         });
         displayCourse();
@@ -145,7 +147,6 @@ public class CourseFragment extends Fragment{
     }
 
     private void createNewCourse() {
-        DataManager dm = DataManager.getInstance();
         mCourse = dm.getCourses().get(mCoursePosition = dm.createNewCourse());
     }
 
@@ -195,7 +196,7 @@ public class CourseFragment extends Fragment{
 
     /**Deletes the course at mCoursePosition*/
     private void deleteCourse(){
-        DataManager.getInstance().removeCourseAt(mCoursePosition);
+        dm.removeCourseAt(mCoursePosition);
     }
 
     /**

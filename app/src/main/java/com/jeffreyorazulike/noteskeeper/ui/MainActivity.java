@@ -1,4 +1,4 @@
-package com.jeffreyorazulike.noteskeeper;
+package com.jeffreyorazulike.noteskeeper.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,12 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.jeffreyorazulike.noteskeeper.databinding.ActivityMainBinding;
-import com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment;
-
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,8 +17,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.jeffreyorazulike.noteskeeper.R;
+import com.jeffreyorazulike.noteskeeper.databinding.ActivityMainBinding;
+import com.jeffreyorazulike.noteskeeper.ui.home.HomeFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

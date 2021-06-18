@@ -1,21 +1,24 @@
 package com.jeffreyorazulike.noteskeeper.db.dao;
 
+import com.jeffreyorazulike.noteskeeper.utils.Constants;
+import com.jeffreyorazulike.noteskeeper.utils.Interfaces;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
+
+import static com.jeffreyorazulike.noteskeeper.utils.Constants.EXECUTOR;
 
 public class DataManager {
-    private static DataManager ourInstance = null;
+    private static final Future<DataManager> instance = EXECUTOR.submit(DataManager::new);
+    public static final Interfaces.Supplier<DataManager> INSTANCE = () -> Constants.<DataManager>FUTURE_GETTER().apply(instance);
 
     private final List<CourseInfo> mCourses = new ArrayList<>();
     private final List<NoteInfo> mNotes = new ArrayList<>();
 
-    public static DataManager getInstance() {
-        if(ourInstance == null) {
-            ourInstance = new DataManager();
-            ourInstance.initializeCourses();
-            ourInstance.initializeExampleNotes();
-        }
-        return ourInstance;
+    private DataManager() {
+        initializeCourses();
+        initializeExampleNotes();
     }
 
     public String getCurrentUserName() {
@@ -36,12 +39,11 @@ public class DataManager {
         return mNotes.size() - 1;
     }
 
-    public boolean removeNoteAt(int position) {
+    public void removeNoteAt(int position) {
         if(position >= mNotes.size() || position < 0)
-            return false;
+            return;
 
         mNotes.remove(position);
-        return true;
     }
 
     public int createNewCourse() {
@@ -50,12 +52,11 @@ public class DataManager {
         return mCourses.size() - 1;
     }
 
-    public boolean removeCourseAt(int position) {
+    public void removeCourseAt(int position) {
         if(position >= mCourses.size() || position < 0)
-            return false;
+            return;
 
         mCourses.remove(position);
-        return true;
     }
 
     public int findNote(NoteInfo note) {
@@ -97,11 +98,7 @@ public class DataManager {
         return count;
     }
 
-    private DataManager() {
-    }
-
     //region Initialization code
-
     private void initializeCourses() {
         mCourses.add(initializeCourse1());
         mCourses.add(initializeCourse2());
@@ -110,9 +107,7 @@ public class DataManager {
     }
 
     public void initializeExampleNotes() {
-        final DataManager dm = getInstance();
-
-        CourseInfo course = dm.getCourse("android_intents");
+        CourseInfo course = getCourse("android_intents");
         course.getModule("android_intents_m01").setComplete(true);
         course.getModule("android_intents_m02").setComplete(true);
         course.getModule("android_intents_m03").setComplete(true);
@@ -121,7 +116,7 @@ public class DataManager {
         mNotes.add(new NoteInfo(course, "Delegating intents",
                 "PendingIntents are powerful; they delegate much more than just a component invocation"));
 
-        course = dm.getCourse("android_async");
+        course = getCourse("android_async");
         course.getModule("android_async_m01").setComplete(true);
         course.getModule("android_async_m02").setComplete(true);
         mNotes.add(new NoteInfo(course, "Service default threads",
@@ -129,7 +124,7 @@ public class DataManager {
         mNotes.add(new NoteInfo(course, "Long running operations",
                 "Foreground Services can be tied to a notification icon"));
 
-        course = dm.getCourse("java_lang");
+        course = getCourse("java_lang");
         course.getModule("java_lang_m01").setComplete(true);
         course.getModule("java_lang_m02").setComplete(true);
         course.getModule("java_lang_m03").setComplete(true);
@@ -142,7 +137,7 @@ public class DataManager {
         mNotes.add(new NoteInfo(course, "Anonymous classes",
                 "Anonymous classes simplify implementing one-use types"));
 
-        course = dm.getCourse("java_core");
+        course = getCourse("java_core");
         course.getModule("java_core_m01").setComplete(true);
         course.getModule("java_core_m02").setComplete(true);
         course.getModule("java_core_m03").setComplete(true);
@@ -207,6 +202,4 @@ public class DataManager {
 
         return new CourseInfo("java_core", "Java Fundamentals: The Core Platform", modules);
     }
-    //endregion
-
 }

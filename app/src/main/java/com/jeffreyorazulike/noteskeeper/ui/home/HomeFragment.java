@@ -1,6 +1,5 @@
 package com.jeffreyorazulike.noteskeeper.ui.home;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,27 +7,33 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.jeffreyorazulike.noteskeeper.MainActivity;
 import com.jeffreyorazulike.noteskeeper.R;
 import com.jeffreyorazulike.noteskeeper.databinding.ContentNoteListBinding;
 import com.jeffreyorazulike.noteskeeper.databinding.FragmentHomeBinding;
+import com.jeffreyorazulike.noteskeeper.ui.MainActivity;
+
+import static com.jeffreyorazulike.noteskeeper.db.dao.DataManager.INSTANCE;
 
 public class HomeFragment extends Fragment {
-    public enum SHOW_VALUES{NOTES, COURSES}
 
+    public enum SHOW_VALUES{NOTES, COURSES}
 
     private HomeViewModel mHomeViewModel;
     private ContentNoteListBinding mContentBinding;
     private LinearLayoutManager mLinearLayoutManager;
     private GridLayoutManager mGridLayoutManager;
     private FragmentHomeBinding mBinding;
+
+    @Override
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mHomeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -62,7 +67,8 @@ public class HomeFragment extends Fragment {
             Navigation.findNavController(
                     requireActivity(), R.id.nav_host_fragment).navigateUp();
 
-        mHomeViewModel.init(mBinding.fabAdd);
+
+        mHomeViewModel.init(mBinding.fabAdd, INSTANCE.get());
         switch (show_values){
             case NOTES: mContentBinding.rvNotes.setLayoutManager(mLinearLayoutManager);
                 break;

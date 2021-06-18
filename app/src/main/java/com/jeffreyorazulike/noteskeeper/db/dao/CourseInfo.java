@@ -1,16 +1,12 @@
 package com.jeffreyorazulike.noteskeeper.db.dao;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "courses")
@@ -62,6 +58,7 @@ public final class CourseInfo {
             mModules.get(i).setComplete(status[i]);
     }
 
+    @Nullable
     public ModuleInfo getModule(String moduleId) {
         for(ModuleInfo moduleInfo: mModules) {
             if(moduleId.equals(moduleInfo.getModuleId()))

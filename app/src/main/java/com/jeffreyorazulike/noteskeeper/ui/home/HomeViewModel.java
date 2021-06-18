@@ -16,19 +16,19 @@ public class HomeViewModel extends ViewModel {
 
     private HomeFragment.SHOW_VALUES currentScreen = HomeFragment.SHOW_VALUES.NOTES;
 
-    void init(FloatingActionButton floatingActionButton){
+    void init(FloatingActionButton floatingActionButton, DataManager dataManager){
         switch (currentScreen){
             case NOTES:
                 if(mNotesAdapter == null)
                     mNotesAdapter = new NotesAdapter(
-                            DataManager.getInstance().getNotes(), floatingActionButton.getContext());
+                            dataManager.getNotes(), floatingActionButton.getContext());
                 floatingActionButton.setOnClickListener(mNotesAdapter);
                 mNotesKeeperAdapter = mNotesAdapter;
                 break;
             case COURSES:
                 if(mCoursesAdapter == null)
                     mCoursesAdapter = new CoursesAdapter(
-                            DataManager.getInstance().getCourses(), floatingActionButton.getContext());
+                            dataManager.getCourses(), floatingActionButton.getContext());
                 floatingActionButton.setOnClickListener(mCoursesAdapter);
                 mNotesKeeperAdapter = mCoursesAdapter;
                 break;

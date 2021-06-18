@@ -1,20 +1,17 @@
-package com.jeffreyorazulike.noteskeeper;
+package com.jeffreyorazulike.noteskeeper.ui;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.preference.EditTextPreference;
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import org.jetbrains.annotations.NotNull;
+import com.jeffreyorazulike.noteskeeper.R;
 
-import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {

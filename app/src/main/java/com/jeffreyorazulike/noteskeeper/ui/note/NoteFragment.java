@@ -17,11 +17,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.jeffreyorazulike.noteskeeper.R;
+import com.jeffreyorazulike.noteskeeper.databinding.ContentNoteBinding;
+import com.jeffreyorazulike.noteskeeper.databinding.FragmentNoteBinding;
 import com.jeffreyorazulike.noteskeeper.db.dao.CourseInfo;
 import com.jeffreyorazulike.noteskeeper.db.dao.DataManager;
 import com.jeffreyorazulike.noteskeeper.db.dao.NoteInfo;
-import com.jeffreyorazulike.noteskeeper.databinding.ContentNoteBinding;
-import com.jeffreyorazulike.noteskeeper.databinding.FragmentNoteBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,9 @@ public class NoteFragment extends Fragment {
     private int mNotePosition;
 
     private NoteViewModel mViewModel;
-    private ContentNoteBinding                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             mBinding;
+    private ContentNoteBinding mBinding;
+
+    private final DataManager dm = DataManager.INSTANCE.get();
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class NoteFragment extends Fragment {
         super.onPause();
         if(mIsCancelling)
             if(mIsNewNote)
-                DataManager.getInstance().removeNoteAt(mNotePosition);
+                dm.removeNoteAt(mNotePosition);
             else restoreOriginalNoteValues();
         else saveNote();
     }
@@ -106,14 +108,14 @@ public class NoteFragment extends Fragment {
     public void onPrepareOptionsMenu(@NotNull final Menu menu) {
         menu.findItem(R.id.action_settings).setVisible(false);
         final MenuItem next = menu.findItem(R.id.action_next);
-        final int lastIndex = DataManager.getInstance().getNotes().size() - 1;
+        final int lastIndex = dm.getNotes().size() - 1;
         next.setEnabled(mNotePosition < lastIndex);
     }
 
     private void initializeDisplayContent(){
         mViewModel.mIsNewlyCreated = false;
 
-        List<CourseInfo> courses = DataManager.getInstance().getCourses();
+        List<CourseInfo> courses = dm.getCourses();
         ArrayAdapter<CourseInfo> listAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, courses);
         listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mBinding.spinnerCourses.setAdapter(listAdapter);
@@ -127,21 +129,20 @@ public class NoteFragment extends Fragment {
         if(mIsNewNote){
             createNewNote();
         }else{
-            mNote = DataManager.getInstance().getNotes().get(mNotePosition);
+            mNote = dm.getNotes().get(mNotePosition);
             displayNote();
             saveOriginalNoteValues();
         }
     }
 
     private void createNewNote() {
-        DataManager dm = DataManager.getInstance();
         mNotePosition = dm.createNewNote();
         mNote = dm.getNotes().get(mNotePosition);
     }
 
     private void displayNote() {
         mBinding.spinnerCourses.setSelection(
-                DataManager.getInstance().getCourses().indexOf(mNote.getCourse()));
+                dm.getCourses().indexOf(mNote.getCourse()));
         Objects.requireNonNull(
                 mBinding.tilTitle.getEditText()).setText(mNote.getTitle());
         Objects.requireNonNull(
@@ -152,7 +153,7 @@ public class NoteFragment extends Fragment {
         saveNote();
 
         ++mNotePosition;
-        mNote = DataManager.getInstance().getNotes().get(mNotePosition);
+        mNote = dm.getNotes().get(mNotePosition);
         saveOriginalNoteValues();
         displayNote();
 
@@ -166,7 +167,7 @@ public class NoteFragment extends Fragment {
     }
 
     private void restoreOriginalNoteValues() {
-        mNote.setCourse(DataManager.getInstance().getCourse(
+        mNote.setCourse(dm.getCourse(
                         mViewModel.mOriginalCourseId));
         mNote.setTitle(mViewModel.mOriginalNoteTitle);
         mNote.setText(mViewModel.mOriginalNoteText);
@@ -197,7 +198,7 @@ public class NoteFragment extends Fragment {
 
     /**Deletes a the current note*/
     private void deleteNote() {
-        DataManager.getInstance().removeNoteAt(mNotePosition);
+        dm.removeNoteAt(mNotePosition);
         Navigation.findNavController(mBinding.getRoot()).popBackStack();
     }
 }
